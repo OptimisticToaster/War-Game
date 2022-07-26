@@ -23,10 +23,14 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(len(test_player), 3)
         self.assertEqual(str(test_player), 'H6, SQ, C9')
         # Remove a Card and check hand
-        test_player.remove_card_by_index(2)
+        a = test_player.remove_card_by_index(2)
+        self.assertEqual(a.suit, 'C')
+        self.assertEqual(a.rank, '9')
         self.assertEqual(len(test_player), 2)
         self.assertEqual(str(test_player), 'H6, SQ')
-        test_player.remove_card_by_suit_rank('H', '6')
+        b = test_player.remove_card_by_suit_rank('H', '6')
+        self.assertEqual(b.suit, 'H')
+        self.assertEqual(b.rank, '6')
         self.assertEqual(len(test_player), 1)
         self.assertEqual(str(test_player), 'SQ')
 

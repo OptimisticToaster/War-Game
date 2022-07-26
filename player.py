@@ -33,13 +33,14 @@ class Player():
         for i in c:
             self.hand.append(i)
 
-    def remove_card_by_suit_rank(self, s:str, r:str) -> None:
+    def remove_card_by_suit_rank(self, s:str, r:str) -> Card:
         """Remove card by suit and rank."""
         a = Card(s, r)
         self.hand.remove(a)
+        return a
 
 
-    def remove_card_by_index(self, n:int) -> None:
+    def remove_card_by_index(self, n:int) -> Card:
         """Remove card by index position
            Index 0 is top card, index -1 is bottom card."""
-        self.hand.pop(n)
+        return self.hand.pop(n)
