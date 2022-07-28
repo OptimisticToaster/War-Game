@@ -1,21 +1,17 @@
-from player import Player
-from card import Card
-mark = Player()
-new_cards = [Card('C', '3'), Card('D', 'Q'), Card('S', '6'), Card('H', 'A'), Card('H', '4'), Card('S', '9'), Card('D', 'A'), Card('C', '10')]
-# new_cards = [Card('C', '3')]
-mark.add_cards(new_cards)
-print(f'Mark has {len(mark)} cards:  {mark}')
-# h.remove_card_by_index(1)
+# from player import Player
+# from card import Card
+# mark = Player()
+# new_cards = [Card('C', '3'), Card('D', 'Q'), Card('S', '6'), Card('H', 'A'), Card('H', '4'), Card('S', '9'), Card('D', 'A'), Card('C', '10')]
+# # new_cards = [Card('C', '3')]
+# mark.add_cards(new_cards)
+# print(f'Mark has {len(mark)} cards:  {mark}')
+# # h.remove_card_by_index(1)
 
-print(mark)
+# print(mark)
 
-mark.remove_card_by_suit_rank('H', '4')
-mark.remove_card_by_suit_rank('S', '6')
-print(f'Mark has {len(mark)} cards:  {mark}')
-
-exit()
-
-
+# mark.remove_card_by_suit_rank('H', '4')
+# mark.remove_card_by_suit_rank('S', '6')
+# print(f'Mark has {len(mark)} cards:  {mark}')
 
 from deck import Deck
 
@@ -25,8 +21,11 @@ d = Deck()
 d.shuffle()
 print(f'{len(d)} cards:  {d}')
 
-d.deal_cards(40)
+a = d.deal_cards(10)
 print(f'{len(d)} cards:  {d}')
+
+for _ in a:
+    print(_)
 
 exit()
 

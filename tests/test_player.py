@@ -17,6 +17,13 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(test_player.score, 0)
         # Check that hand is empty
         self.assertEqual(len(test_player.hand), 0)
+
+
+    def test_modify_hand(self):
+        """Try creating a Player and modify hand."""
+        test_player = player.Player()
+        # Check that hand is empty
+        self.assertEqual(len(test_player.hand), 0)
         # Add some Cards to the hand and check hand
         new_cards = [card.Card('H', '6'), card.Card('S', 'Q'), card.Card('C', '9')]
         test_player.add_cards(new_cards)
@@ -33,7 +40,6 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(b.rank, '6')
         self.assertEqual(len(test_player), 1)
         self.assertEqual(str(test_player), 'SQ')
-
 
 if __name__ == '__main__':
     unittest.main()

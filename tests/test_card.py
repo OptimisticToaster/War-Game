@@ -16,11 +16,15 @@ class TestCard(unittest.TestCase):
         self.assertEqual(str(test_card), 'H6')
         # Check full label
         self.assertEqual(test_card.get_full(), '6 of Hearts')
-        # Check equality
+
+
+    def test_equality(self):
+        """Check equality of two Cards."""
+        test_card1 = card.Card('H', '6')
         test_card2 = card.Card('H', '6')
-        self.assertTrue(test_card.__eq__(test_card2))
+        self.assertTrue(test_card1.__eq__(test_card2))
         test_card3 = card.Card('C', '9')
-        self.assertFalse(test_card.__eq__(test_card3))
+        self.assertFalse(test_card1.__eq__(test_card3))
 
 
 if __name__ == '__main__':
