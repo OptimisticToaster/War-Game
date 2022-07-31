@@ -36,3 +36,5 @@ class Card():
     def __eq__(self, other):
         """Compare equality of two Card objects."""
         return self.suit == other.suit and self.rank == other.rank
+
+
