@@ -12,7 +12,10 @@ class Player():
         """Initiate an empty hand as collection of Cards."""
         self.name = player_name
         self.score = 0
+        # Cards holding in hand
         self.hand = []
+        # Cards showing in face up stack on the table
+        self.table_face_up = []
 
 
     def __str__(self) -> str:
@@ -34,7 +37,7 @@ class Player():
         return a[:-2]
 
 
-    def add_cards(self, c:'list') -> None:
+    def add_cards(self, c:list) -> None:
         """Append a list of Cards to the end of the hand."""
         for i in c:
             self.hand.append(i)
@@ -51,3 +54,9 @@ class Player():
         """Remove card by index position
            Index 0 is top card, index -1 is bottom card."""
         return self.hand.pop(n)
+
+
+    def play_cards_faceup(self, n:int) -> None:
+        """Move card from hand to faceup stack on table."""
+        for _ in range(n):
+            self.table_face_up.append(self.remove_card_by_index(0))

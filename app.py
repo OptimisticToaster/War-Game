@@ -55,13 +55,16 @@ def main():
         player1_cards = []
         player2_cards = []
 
-        player1_cards.append(player1.remove_card_by_index(0))
-        player2_cards.append(player2.remove_card_by_index(0))
-        for _ in player1_cards:
+        player1.play_cards_faceup(1)
+        player2.play_cards_faceup(1)
+
+        for _ in player1.table_face_up:
             print(_)
         print("  ")
-        for _ in player2_cards:
+        for _ in player2.table_face_up:
             print(_)
+
+        exit()
 
         # Compare cards played
         if player1_cards[0].rank > player2_cards[0].rank:
@@ -92,12 +95,12 @@ def main():
 
     # Game is over - see who won
     if len(player1) == 0:
-        print("Player One out of cards! Game Over")
-        print("Player Two Wins!")
+        print("Player1 out of cards! Game Over")
+        print(f"Player2 wins in {game_round} rounds!")
 
     if len(player2) == 0:
-        print("Player Two out of cards! Game Over")
-        print("Player One Wins!")
+        print("Player2 out of cards! Game Over")
+        print(f"Player1 wins in {game_round} rounds!")
 
 
 if __name__ == "__main__":
