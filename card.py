@@ -4,7 +4,7 @@ import settings
 
 
 class Card():
-    """Manage instance of a Card in a Deck."""
+    """Manage instance of a Card."""
 
 
     def __init__(self, suit: str, rank: str) -> None:
