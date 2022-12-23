@@ -12,9 +12,12 @@ class Player():
         """Initiate an empty hand as collection of Cards."""
         self.name = player_name
         self.score = 0
-        # Cards holding in hand
+        # Cards holding in hand.
+        # Index 0-> from back/left to front/right
         self.hand = []
-        # Cards showing in face up stack on the table
+        # Cards showing in face up stack on the table.
+        # Index 0-> from bottom of stack up
+        # So [0] refers to bottom card showing
         self.table_face_up = []
 
 
@@ -37,6 +40,15 @@ class Player():
         return a[:-2]
 
 
+    def show_table_cards(self) -> list:
+        """Display table cards."""
+        a = ''
+        for i in self.table_face_up:
+            a += str(i) + ', '
+        # remove the trailing comma and space from the assembled string
+        return a[:-2]
+
+
     def add_cards(self, c:list) -> None:
         """Append a list of Cards to the end of the hand."""
         for i in c:
@@ -45,18 +57,24 @@ class Player():
 
     def remove_card_by_suit_rank(self, s:str, r:str) -> Card:
         """Remove card by suit and rank."""
-        a = Card(s, r)
-        self.hand.remove(a)
-        return a
+        return True if self.hand.remove(Card(s,r)) else False
 
 
     def remove_card_by_index(self, n:int) -> Card:
-        """Remove card by index position
-           Index 0 is top card, index -1 is bottom card."""
+        """Remove card from hand by index position
+           Index 0 is back/left card, index -1 is front/right card."""
         return self.hand.pop(n)
 
 
     def play_cards_faceup(self, n:int) -> None:
-        """Move card from hand to faceup stack on table."""
+        """Move card from hand to faceup stack on table.
+            Index for hand has 0 is back/left card, index -1 is front/right card.
+            Index for table has 0 is bottom card showing."""
         for _ in range(n):
             self.table_face_up.append(self.remove_card_by_index(0))
+
+
+    def clear_cards_faceup(self) -> None:
+        """Clear cards from table."""
+        self.table_face_up.clear()
+

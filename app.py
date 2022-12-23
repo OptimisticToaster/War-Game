@@ -1,6 +1,8 @@
 """Run the War game application."""
 
+from datetime import datetime
 import time
+import logging
 
 import settings
 
@@ -9,23 +11,28 @@ import deck
 import player
 
 
+# Setup logging
+logger =  logging.getLogger('__name__')
+logging.basicConfig(level=logging.DEBUG, filename=datetime.now().strftime('app_%Y%m%d-%H%M%s.log'), filemode='w', format='%(asctime)s : %(name)s - %(levelname)s - %(message)s', datefmt='%Y%m%d %H:%M:%S')
+# logging.basicConfig(level=logging.DEBUG, format='%(asctime)s : %(name)s - %(levelname)s - %(message)s', datefmt='%y-%m-%d %H:%M:%S')
+
+
 def show_status(player1, player2):
-    """Show current card status of each player."""
+    """Return statement of current card status of each player."""
     if len(player1) == len(player2):
-        print(f'Both players have {len(player1)} cards.')
+        return f'Both players have {len(player1)} cards.'
     else:
-        print(f'Player1 has {len(player1)} cards, and Player2 has {len(player2)} cards.')
+        return f'Player1 has {len(player1)} cards, and Player2 has {len(player2)} cards.'
 
 def main():
     """Run application."""
+    logger.debug('Starting application.')
 
     # Create player 1
-    player_name = input('Enter name for player 1: ')
-    player1 = player.Player(player_name)
+    player1 = player.Player(input('Enter name for player 1: '))
 
     # Create player 2
-    player_name = input('Enter name for player 2: ')
-    player2 = player.Player(player_name)
+    player2 = player.Player(input('Enter name for player 2: '))
 
     # Setup deck
     d = deck.Deck()
@@ -37,61 +44,78 @@ def main():
         player1.add_cards(d.deal_cards(1))
         player2.add_cards(d.deal_cards(1))
 
-    # Show status.
-    print('\nLet\'s play War!')
-    show_status(player1, player2)
+    logger.debug('Player 1 hand: ')
+    for _ in player1.hand:
+        logger.debug(_)
+    logger.debug('Player 2 hand: ')
+    for _ in player2.hand:
+        logger.debug(_)
 
     # Ask for key press to start game.
     input('The game is ready to begin. Press <ENTER> to continue.')
 
-
-    # Play the game by a series of rounds, with pause between.
+    # Play the game by a series of rounds as long as each player has more than 0 cards.
+    # Pause between each round to display the status.
     game_round = 0
     while len(player1) > 0 and len(player2) > 0:
         game_round += 1
         print(f'\n\nRound {game_round}')
+        print(show_status(player1, player2))
+        logger.debug(show_status(player1, player2))
 
-        # Players play 1 card
-        player1_cards = []
-        player2_cards = []
-
-        player1.play_cards_faceup(1)
-        player2.play_cards_faceup(1)
-
-        for _ in player1.table_face_up:
-            print(_)
-        print("  ")
-        for _ in player2.table_face_up:
-            print(_)
-
-        exit()
-
-        # Compare cards played
-        if player1_cards[0].rank > player2_cards[0].rank:
-            # Player1 wins
-            print(f'{player1.name} (player 1) wins the round.')
-            # Move Player1's card to the bottom of Player1's hand.
-            player1.add_cards(player1.remove_card_by_index(-1))
-            # Move Player2's card to the bottom of Player1's hand.
-            player1.add_cards(player2.remove_card_by_index(-1))
-        elif player2_cards[0].rank > player1_cards[0].rank:
-            # Player2 wins
-            print(f'{player2.name} (player 2) wins the round.')
-            # Move Player2's card to the bottom of Player2's hand.
-            player2.add_cards(player2.remove_card_by_index(-1))
-            # Move Player2's card to the bottom of Player1's hand.
-            player2.add_cards(player1.remove_card_by_index(-1))
-        else:
-            print('Tie')
-
-            # For now, just return the cards
-            player1.add_cards(player1.remove_card_by_index(-1))
-            player2.add_cards(player2.remove_card_by_index(-1))
-
-        time.sleep(3)
+        logger.debug('Player 1 cards: ')
+        for _ in player1.hand:
+            logger.debug(_)
+        logger.debug('Player 2 cards: ')
+        for _ in player2.hand:
+            logger.debug(_)
+        
+        time.sleep(2)
 
         # Players play a list of cards from 1+ cards
         # In case of tie, each player plays up to 3 cards then plays again
+        player1.play_cards_faceup(1)
+        player2.play_cards_faceup(1)
+
+        print(f'Player 1 showing {player1.table_face_up[-1]}')
+        print(f'Player 2 showing {player2.table_face_up[-1]}')
+
+        logger.debug('Player 1 table cards: ')
+        for _ in player1.table_face_up:
+            logger.debug(_)
+        logger.debug('Player 2 table cards: ')
+        for _ in player2.table_face_up:
+            logger.debug(_)
+
+        # Compare plays to find winner.
+        if player1.table_face_up[-1].rank > player2.table_face_up[-1].rank:
+            # Player 1 wins
+            print('Player 1 wins the round.')
+            # Add table cards to Player 1's hand
+            player1.add_cards(player1.table_face_up)
+            player1.add_cards(player2.table_face_up)
+            # Clear table stacks
+            player1.clear_cards_faceup()
+            player2.clear_cards_faceup()
+        elif player2.table_face_up[-1].rank > player1.table_face_up[-1].rank:
+            # Player 2 wins
+            print('Player 2 wins the round.')
+            # Add table cards to Player 2's hand
+            player2.add_cards(player2.table_face_up)
+            player2.add_cards(player1.table_face_up)
+            # Clear table stacks
+            player1.clear_cards_faceup()
+            player2.clear_cards_faceup()
+        else:
+            # Tie
+            print('Tie')
+            # Return cards to hand.
+            player1.add_cards(player1.table_face_up)
+            player2.add_cards(player2.table_face_up)
+            # Clear table stacks
+            player1.clear_cards_faceup()
+            player2.clear_cards_faceup()
+
 
     # Game is over - see who won
     if len(player1) == 0:
